@@ -8,5 +8,5 @@ var Tile = new Schema({
   rating: Number
 });
 
-module.exports = mongoose.model('dry-posts', Post);
+module.exports = mongoose.model('tiles', Tile);
 
