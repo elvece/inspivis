@@ -6,7 +6,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swig = require('swig');
+var mongoose = require('mongoose');
 
+// *** config file *** //
+var config = require('../../_config');
 
 // *** routes *** //
 var routes = require('./routes/index.js');
@@ -33,6 +36,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client')));
 
+// *** mongoose ** //
+mongoose.connect(config.MONGOLAB_URI);
 
 // *** main routes *** //
 app.use('/', routes);

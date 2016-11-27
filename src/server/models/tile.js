@@ -5,8 +5,9 @@ var Tile = new Schema({
   image: String,
   description: String,
   artist: String,
-  rating: Number
+  rating: Number,
+  tags: [String]
 });
 
-module.exports = mongoose.model('tiles', Tile);
+module.exports = mongoose.model('Tiles', Tile);
 
