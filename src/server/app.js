@@ -7,9 +7,32 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swig = require('swig');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var config = require('./auth.js');
+var InstagramStrategy = require('passport-instagram').Strategy;
+
+// serialize and deserialize
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
 // *** config file *** //
 var config = require('../../_config');
+
+passport.use(new InstagramStrategy({
+  clientID: config.instagram.clientID,
+  clientSecret: config.instagram.clientSecret,
+  callbackURL: config.instagram.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      return done(null, profile);
+    });
+  }
+));
 
 // *** routes *** //
 var routes = require('./routes/index.js');
@@ -42,6 +65,10 @@ mongoose.connect(config.MONGOLAB_URI);
 // *** main routes *** //
 app.use('/', routes);
 
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -49,6 +76,15 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+// port
+app.listen(1337);
+
+// test authentication
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/');
+}
 
 
 // *** error handlers *** //

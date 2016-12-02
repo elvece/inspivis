@@ -13,6 +13,18 @@ router.get('/', function(req, res, next) {
     //     res.json({'Error': results});
     //   })
     //   .done();
+
+
 });
+
+router.get('/auth/instagram',
+  passport.authenticate('instagram'),
+  function(req, res){});
+
+router.get('/auth/instagram/callback',
+  passport.authenticate('instagram', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/account');
+  });
 
 module.exports = router;
