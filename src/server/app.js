@@ -8,31 +8,22 @@ var bodyParser = require('body-parser');
 var swig = require('swig');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var config = require('./auth.js');
-var InstagramStrategy = require('passport-instagram').Strategy;
 
 // serialize and deserialize
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  console.log('serializeUser: ' + user._id);
+  done(null, user._id);
 });
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user){
+    console.log(user);
+      if(!err) done(null, user);
+      else done(err, null);
+    });
 });
 
 // *** config file *** //
 var config = require('../../_config');
-
-passport.use(new InstagramStrategy({
-  clientID: config.instagram.clientID,
-  clientSecret: config.instagram.clientSecret,
-  callbackURL: config.instagram.callbackURL
-  },
-  function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      return done(null, profile);
-    });
-  }
-));
 
 // *** routes *** //
 var routes = require('./routes/index.js');
