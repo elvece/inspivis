@@ -1,10 +1,10 @@
 var passport = require('passport');
-var config = require('./oauth.js');
+var config = require('../../oauth.js');
 var User = require('./models/user.js')
 var InstagramStrategy = require('passport-instagram').Strategy;
 
 
-passport.use(new InstagramStrategy({
+module.exports = passport.use(new InstagramStrategy({
   clientID: config.instagram.clientID,
   clientSecret: config.instagram.clientSecret,
   callbackURL: config.instagram.callbackURL
@@ -34,3 +34,4 @@ passport.use(new InstagramStrategy({
     });
   }
 ));
+

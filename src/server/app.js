@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var swig = require('swig');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var instaAuth = require('./authentication.js');
+var session = require('express-session');
+
 
 // serialize and deserialize
 passport.serializeUser(function(user, done) {
@@ -27,6 +30,7 @@ var config = require('../../_config');
 
 // *** routes *** //
 var routes = require('./routes/index.js');
+var auth = require('./routes/auth.js');
 
 
 // *** express instance *** //
@@ -49,17 +53,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client')));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // *** mongoose ** //
 mongoose.connect(config.MONGOLAB_URI);
 
 // *** main routes *** //
 app.use('/', routes);
+app.use('/auth', auth);
 
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -71,11 +79,6 @@ app.use(function(req, res, next) {
 // port
 app.listen(1337);
 
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/');
-}
 
 
 // *** error handlers *** //

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Tile = ('../models/tile.js');
+var User = require('./models/user.js');
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -14,17 +15,22 @@ router.get('/', function(req, res, next) {
     //   })
     //   .done();
 
-
+router.get('/account', ensureAuthenticated, function(req, res){
+  User.findById(req.session.passport.user, function(err, user) {
+    if(err) {
+      console.log(err);  // handle errors
+    } else {
+      res.render('account', { user: user});
+    }
+  });
 });
 
-router.get('/auth/instagram',
-  passport.authenticate('instagram'),
-  function(req, res){});
+//authentication helper
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/');
+}
 
-router.get('/auth/instagram/callback',
-  passport.authenticate('instagram', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/account');
-  });
+});
 
 module.exports = router;
