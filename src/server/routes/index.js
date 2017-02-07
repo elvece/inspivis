@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Tile = ('../models/tile.js');
-var User = require('./models/user.js');
+var User = require('../models/user.js');
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -23,6 +23,10 @@ router.get('/account', ensureAuthenticated, function(req, res){
       res.render('account', { user: user});
     }
   });
+});
+
+router.get('/ping', function(req, res){
+    res.status(200).send("pong!");
 });
 
 //authentication helper

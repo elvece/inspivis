@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+  <div class="container">
+
+    <p>Welcome to {{ user.name }}</p>
+    <p>Account</p>
+    <a href="/logout">Logout</a>
+    <a href="/">Home</a>
+  </div>
+
+{% endblock %}

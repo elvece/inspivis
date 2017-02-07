@@ -9,8 +9,16 @@
 
     <h1>{{ title }}</h1>
     <p>Welcome to {{ title }}</p>
-    <a href="/logout">Logout</a>
-    <a href="/auth/instagram">Login Insta</a>
+
+    {% if !user %}
+      <a href="/auth/instagram">Login</a>
+    {% endif %}
+    {% if user %}
+      <p>You are currently logged in as <strong>{{ user.username }}</strong></p>
+      <a href="/logout">Logout</a>
+    {% endif %}
+
+
   </div>
 
 {% endblock %}

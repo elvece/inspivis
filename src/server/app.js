@@ -1,7 +1,7 @@
 // *** main dependencies *** //
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -9,6 +9,7 @@ var swig = require('swig');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var instaAuth = require('./authentication.js');
+var User = require('./models/user.js');
 var session = require('express-session');
 
 

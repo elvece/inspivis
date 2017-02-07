@@ -10,6 +10,7 @@ module.exports = passport.use(new InstagramStrategy({
   callbackURL: config.instagram.callbackURL
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log('**PROFILE: ', profile)
     User.findOne({ oauthID: profile.id }, function(err, user) {
       if(err) {
         console.log(err);  // handle errors!
